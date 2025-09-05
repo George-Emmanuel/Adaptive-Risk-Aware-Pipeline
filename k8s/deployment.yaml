@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ardsp-demo
+  labels:
+    app: ardsp
+    data-classification: public
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ardsp
+  template:
+    metadata:
+      labels:
+        app: ardsp
+        owner: devsecops
+    spec:
+      containers:
+      - name: app
+        image: ghcr.io/example/ardsp:latest
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        env:
+        - name: APP_ENV
+          value: "dev"
